@@ -1,4 +1,6 @@
-- sweep functio
-- função para medir os parâmetros do gerador de funções
-- trigger
-- modulação
+- sweep function
+- trigger para o scope
+- modulação para o gerador de função
+- resistência do gerador
+- mudar a tela do osciloscópio
+
