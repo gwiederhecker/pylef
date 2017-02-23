@@ -8,6 +8,7 @@ Outras "imports" necessários para os drivers são:
 2) os
 3) time
 4) pandas
+
 -------------------------
 bk.py: driver para comunicar com o gerador de sinal BK 4052.
 Página do instrumento: http://www.bkprecision.com/products/signal-generators/4052-5-mhz-dual-channel-function-arbitrary-waveform-generator.html
@@ -15,4 +16,4 @@ Página do instrumento: http://www.bkprecision.com/products/signal-generators/40
 tek.py: driver para comunicar com o osciloscópio TekTronix TBS1062.
 Página do instrumento: http://www.tek.com/oscilloscope/tbs1000-digital-storage-oscilloscope-manual
 -------------------------
-
+example_0.ipynb: iPython notebook (Jupyter) with basic communication examples
