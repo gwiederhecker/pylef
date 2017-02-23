@@ -1,0 +1,3 @@
+Como estão agora, todos os comandos retornam erro quando os valores não podem ser passados para o instrumento. 
+Talvez seja melhor fazer com que alguns deles retornem somente uma mensagem, como o comando para ligar e desligar 
+o gerador de funcções.
