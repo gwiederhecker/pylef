@@ -1,6 +1,6 @@
-- sweep function
-- trigger para o scope
+- sweep function para o gerador de função
+- funções de trigger para o scope
 - modulação para o gerador de função
-- resistência do gerador
-- mudar a tela do osciloscópio
+- FFT no scope
+- terminar função smart scale
 
