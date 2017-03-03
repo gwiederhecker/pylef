@@ -1,6 +1,5 @@
-- sweep function para o gerador de função
-- funções de trigger para o scope
+- implementar sweep function para o gerador de função (já tem uma versão no notebook)
 - modulação para o gerador de função
-- FFT no scope
-- terminar função smart scale
-
+- FFT no MATH mode do osciloscópio
+- gerador de funções arbitrárias
+- documentação e help
