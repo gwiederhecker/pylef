@@ -255,7 +255,7 @@ class TektronixTBS1062:
 
     
 ############## Saving functions ##### (They shouldn' t be here!!)
-    def save_channels(self, name, header = ['time (s)', 'Channel 1 (V)', 'Channel 2 (V)'], PATH = 'C:\\Users\\Gaeta Integra\\Documents\\Python Scripts\\Felippe\\'):
+    def save_channels(self, name, header = ['time (s)', 'Channel 1 (V)', 'Channel 2 (V)'], PATH = ''):
         """ save the the channels 1 and 2 and save the with the "header" in the "PATH" ad with the file name "name") """
 ##### reading and setting directory name
         x, y1 = self.ch1.read_channel()   # read channel 1
@@ -389,8 +389,8 @@ class ChannelScope:
         y_factor, y_offset, y_zero = float(temp[6]), float(temp[8]), float(temp[7])  #indices 7 and 8 are right! 
         return [[x_zero, x_factor, x_offset], [y_zero, y_factor, y_offset]]   
 #
-    def set_smart_scale(self):
-        """ dynamically scales the oscilloscope to the masurement. Only changes the scale, no the zero. """
+    def set_dynamic_scale(self):
+        """ dynamically scales the oscilloscope to the measurement. Only works if the offset is correct """
         keep_loop = True
         while keep_loop:
             Vpp = self.measure.Vpp()
@@ -398,6 +398,24 @@ class ChannelScope:
             else:
                 keep_loop = False
                 self.set_scale(Vpp/7.)
+        return None
+#
+    def set_smart_scale(self, log_step = 10, Vmax = 4., D = 0.75):
+        """ dynamically scales the oscilloscope to the measurement. """
+        keep_loop = True
+        while keep_loop:
+            scale, pos_div = self.scale(), self.position()
+            max0, min0 = self.measure.maximum(), self.measure.minimum()
+            pos_top, pos_bot = (Vmax - pos_div)*scale, (-Vmax - pos_div)*scale
+            if max0 >= pos_top or min0 <= pos_bot:  # rescale until one of them comes into the scale 
+                self.set_position(pos_div/log_step)
+                self.set_scale(log_step*scale)
+            else:
+                eta = (max0 + min0)/(max0 - min0)
+                new_pos, new_scale = -eta*(Vmax - D), max0/((1. + eta)*(Vmax - D))
+                self.set_position(new_pos)    
+                self.set_scale(new_scale)
+                keep_loop = False
         return None
 #
     def acquire_y_raw_ascii(self):
@@ -455,7 +473,7 @@ class Measure:
         return float(self.do_measure('FREQ'))
     def period(self):
         """measure the period in s """
-        return float(self.do_measure('PERIOS'))
+        return float(self.do_measure('PERIOd'))
     def mean(self):
         """measure the average value """
         return float(self.do_measure('MEAN'))
@@ -467,7 +485,7 @@ class Measure:
         return float(self.do_measure('RMS'))
     def maximum(self):
         """measure the maximum voltage in one period in V """
-        return float(self.do_measure('MAXImuns'))
+        return float(self.do_measure('MAXImum'))
     def minimum(self):
         """measure the minimum voltage in the screen in V """
         return float(self.do_measure('MINImum'))    
@@ -505,7 +523,7 @@ class Trigger:
     def level(self):
         return float(self.instr.query('TRIGGER:MAIN:LEVEL?'))
 #
-    def set_to_50(self, val):
+    def set_to_50(self):
         """ set trigger level to 50 % """
         self.instr.write('TRIGGER:MAIN SETLevel')
 #
@@ -531,7 +549,7 @@ class Trigger:
     def coupling(self):
         return self.instr.query('TRIGGER:MAIN:EDGE:COUPLING?')[:-1]
 #######
-@read_only_properties('instrument', 'channel', 'functions', 'other_chan', 'dict_info', 'tag_volts', 'frequency_max', 'frequency_min', 'amplitude_max', 'amplitude_min', 'offset_max', 'offset_min', 'phase_max', 'phase_min', 'symmetry_max', 'symmetry_min', 'duty_max', 'duty_min', 'stdev_max', 'stdev_min', 'mean_max', 'mean_min', 'delay_max', 'delay_min')
+@read_only_properties('instrument', 'channel', 'functions', 'other_chan', 'dict_info', 'tag_volts', 'frequency_max', 'frequency_min', 'Vpp_max', 'Vpp_min', 'offset_max', 'offset_min', 'phase_max', 'phase_min', 'symmetry_max', 'symmetry_min', 'duty_max', 'duty_min', 'stdev_max', 'stdev_min', 'mean_max', 'mean_min', 'delay_max', 'delay_min')
 class ChannelFuncGen:
     def __init__(self, instrument, channel):
         """
@@ -547,8 +565,8 @@ class ChannelFuncGen:
         # instrument limits
         self.frequency_max = 5.0e6  # maximum freqeuncy in Hertz
         self.frequency_min = 1.0e-6   # minimum freqeuncy in Hertz
-        self.amplitude_max = 20         # maximum amplitude in V
-        self.amplitude_min = 0.0004           # minimum amplitude in V
+        self.Vpp_max = 20         # maximum peak-to-peak Voltage in V
+        self.Vpp_min = 0.0004           # minimum peak-to-peak Voltage in V
         self.offset_max = 10    # maximum offset in V  
         self.offset_min = -10   # minimum offset in V
         self.phase_max = 360   # maximum phase in degrees
@@ -567,7 +585,7 @@ class ChannelFuncGen:
 # Basic Commands
     def state(self):
         """ return the specified channel state """
-        return self.instr.query('C' + self.channel[-1] + ':OUTput?')
+        return self.instr.query('C' + self.channel[-1] + ':OUTput?').split(' ')[1].split(',')[0]
 #    
     def turn_on(self):
         """ turn the specified channel ON """
@@ -634,13 +652,13 @@ class ChannelFuncGen:
             raise ValueError("The frequency must be between %4.2f uHz and %4.2f MHz" % (1e6*self.frequency_min, 1e-6*self.frequency_max))                 
         return None    
 
-    def set_amplitude(self, val):
-        """set the function generator amplitude """
-        if val <= self.amplitude_max and val >= self.amplitude_min:
+    def set_Vpp(self, val):
+        """set the function generator voltage peak-to-peak """
+        if val <= self.Vpp_max and val >= self.Vpp_min:
             cmd = 'C' + self.channel[-1] + ':BSWV AMP,' + str(float(val)) + 'V'
             self.instr.write(cmd)
         else: 
-            raise ValueError("The amplitude must be between %4.2f V and %4.2f V" % (self.amplitude_min, self.amplitude_max))                 
+            raise ValueError("The Vpp must be between %4.2f V and %4.2f V" % (self.Vpp_min, self.Vpp_max))                 
         return None
     
     def set_offset(self, val):
@@ -723,13 +741,6 @@ class ChannelFuncGen:
                 elif tag == 'type': val = info_vals[n].lower()
                 else: val = float(info_vals[n])
                 output[tag] = val
-        return output 
-#
-    def frequency(self):
-        """
-            return the frequency of the channel
-        """
-        output = self.instr.query('C' + self.channel[-1] + ':BSWV?')
         return output
 #          
     def copy_to(self):
