@@ -1,9 +1,10 @@
+-*- coding: utf-8 -*-
 ################################
 ##
 ##  Class for the function generator
 ##  BK  
 ##
-##
+## @author: Felippe Barbosa
 ##
 #################################
 import visa # interface with NI-Visa
