@@ -1,9 +1,10 @@
+-*- coding: utf-8 -*-
 ################################
 ##
 ##  Class for the Tektronics 
 ##  Osciloscopes
 ##
-##
+## @author: Felippe Barbosa
 #################################
 import visa   # interface with NI-Visa
 import numpy  # module for array manipulation
