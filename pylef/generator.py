@@ -1,12 +1,5 @@
 #-*- coding: utf-8 -*-
-################################
-##
-##  Class for the function generator
-##  BK  
-##
-## @author: Felippe Barbosa
-##
-#################################
+
 import visa # interface with NI-Visa
 ################################
 def read_only_properties(*attrs):
@@ -40,14 +33,79 @@ def read_only_properties(*attrs):
 class BK4052:
     def __init__(self):
         """
-            Gerador de funções
+        BK4052
+        =========
+   
+        This is a virtual object that represents the arbitrary function 
+        generator BK4052 and mimics it's behaviour. The user should 
+        interact with this object in the same fashion he or she interacts 
+        with the function generator. As it is the case for the real function 
+        generator, we have independent access to the both channels, which 
+        are represented by "ch1" and "ch2".
+         
+        The instrument has a "identify" function that returns the instrument
+        information and 3 pyvisa wrapped functions: "read", "write", "query" 
+        and "close" (go to pyvisa documentation for more detail). There is also
+        a function "find_interface" that automatic find in which USB port
+        the function generator is connected.
+                     
+        Usage:
+  
+        >>> import pylef        # import the pylef package
+        >>> instrument = pylef.BK4052()  # define the instrument
+        >>> instrument.idenfify()   # idenfity the instrument
+
+        The channels are independently defined and accessed. For each one of 
+        them we can set up the function properties, such as 'frequency' and 
+        'peak-to-peak voltage' and many channel attibutes, such as 'inversion',
+        'load impedance' and 'TTL sync output'. We can also, turn the channels
+        ON and OFF.
+ 
+        >>> channel1 = instrument.ch1()   # define channel 1
+        >>> channel1.turn_on()       # turn channel 1 ON
+        >>> channel1.sync_on()       # turn the TTL sync output for channel 1 
+
+        The most important is the 'function type', which can be one of those:
+        'SINE', 'SQUARE', 'RAMP', 'PULSE', 'NOISE', 'ARB', 'DC' and each one of 
+        them are defined by a particular set of properties. Those properties are
+        one of: 'frequency', 'Vpp', 'offset', 'phase', 'symmetry', 'duty', 'mean',
+        'stdev', 'delay'. Some of those properties are share by more the one 
+        function type and some are privative to only one type. For example, 'SINE', 
+        'SQUARE', 'RAMP', 'ARB' and 'PULSE' have the 'frequency' and 'Vpp' properties
+        while 'noise' type is the only one who has the 'mean' and 'stded' properties. 
+
+        Usage:
+  
+        >>> channel1.set_function('ramp')  # create a triangular wave
+        >>> channel1.set_frequency(100)    # set the frequency to 100 Hz 
+        >>> channel1.set_Vpp(2)            # set the peak-to-peak voltage to 2 V
+        >>> channel1.set_frequency()
+
+        >>> channel2.turn_on()              # turn channel 2 ON
+        >>> channel2.set_function('noise')  # create a noise
+        >>> channel2.set_mean(0)            # set the average 0 V
+        >>> channel2.set_stdev(0.5)         # set the standard deviation to 0.5 V 
+          
+        The function "wave_info" returns a python dictionay with the particular wave
+        information
+
+        Usage:
+
+        >>> info1 = channel1.wave_info()   # current wave information of channel 1
+        >>> print(info1['frequency'])      # will return 100
+        >>> print(info1['type'])      # will return ramp
+        >>> info2 = channel2.wave_info()   # current wave information of channel 2
+        >>> print(info2['stdev'])          # will return 0.5            
         """
+
         self.id_bk = '0xF4ED'; # identificador do fabricante BK
         interface_name = self.find_interface()
         # instrument initialization
         self.instr = visa.ResourceManager().open_resource(interface_name)   ## resource name
         self.ch1 = ChannelFuncGen(self.instr, 'CH1')
         self.ch2 = ChannelFuncGen(self.instr, 'CH2')
+        self.instr.timeout = 10000 # set timeout to 10 seconds
+        self.instr.chunk_size = 40960  # set the buffer size to 40 kB  
 
     def find_interface(self):
         """ Function to extract the interface name for the  BK function generator"""
@@ -96,7 +154,8 @@ class BK4052:
 #        
     def close(self):
         """ close the instrument """
-        return self.instr.close()  
+        return self.instr.close()
+
 #######
 @read_only_properties('instrument', 'channel', 'functions', 'other_chan', 'dict_info', 'tag_volts', 'frequency_max', 'frequency_min', 'Vpp_max', 'Vpp_min', 'offset_max', 'offset_min', 'phase_max', 'phase_min', 'symmetry_max', 'symmetry_min', 'duty_max', 'duty_min', 'stdev_max', 'stdev_min', 'mean_max', 'mean_min', 'delay_max', 'delay_min')
 class ChannelFuncGen:

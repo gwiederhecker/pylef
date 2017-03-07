@@ -2,7 +2,7 @@ import sys
 from setuptools import setup
 
 
-version = '0.0.2'
+version = '0.0.3'
 
 setup_requires = ['pytest-runner'] if \
     {'pytest', 'test', 'ptr'}.intersection(sys.argv) else []
@@ -27,6 +27,9 @@ setup(
     tests_require=[],
     platforms='OS Independent',
     classifiers=[
-        'Topic :: Scientific/Engineering :: Interface Engine/Protocol Translator'
+        'Topic :: Scientific/Engineering :: Interface Engine/Protocol Translator',
+        'Intended Audience :: Education',
+        'Topic :: Education :: Computer Aided Instruction (CAI)' 
     ],
-    zip_safe=False)
+    zip_safe=False,
+    include_package_data=True)

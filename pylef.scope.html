@@ -1,0 +1,258 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html><head><title>Python: module pylef.scope</title>
+</head><body bgcolor="#f0f0f8">
+
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="heading">
+<tr bgcolor="#7799ee">
+<td valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong><a href="pylef.html"><font color="#ffffff">pylef</font></a>.scope</strong></big></big></font></td
+><td align=right valign=bottom
+><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:/home/felippe/Dropbox/git-repos/pylef/pylef/scope.py">/home/felippe/Dropbox/git-repos/pylef/pylef/scope.py</a></font></td></tr></table>
+    <p><tt>Class&nbsp;for&nbsp;the&nbsp;Tektronics&nbsp;TBS1062</tt></p>
+<p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#aa55cc">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Modules</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#aa55cc"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><table width="100%" summary="list"><tr><td width="25%" valign=top><a href="numpy.html">numpy</a><br>
+<a href="os.html">os</a><br>
+</td><td width="25%" valign=top><a href="pandas.html">pandas</a><br>
+<a href="time.html">time</a><br>
+</td><td width="25%" valign=top><a href="visa.html">visa</a><br>
+</td><td width="25%" valign=top></td></tr></table></td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ee77aa">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Classes</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#ee77aa"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><dl>
+<dt><font face="helvetica, arial">ChannelScope
+</font></dt><dd>
+<dl>
+<dt><font face="helvetica, arial">NewClass
+</font></dt></dl>
+</dd>
+<dt><font face="helvetica, arial"><a href="pylef.scope.html#Measure">Measure</a>
+</font></dt><dt><font face="helvetica, arial">TektronixTBS1062
+</font></dt><dd>
+<dl>
+<dt><font face="helvetica, arial">NewClass
+</font></dt></dl>
+</dd>
+<dt><font face="helvetica, arial">Trigger
+</font></dt><dd>
+<dl>
+<dt><font face="helvetica, arial">NewClass
+</font></dt></dl>
+</dd>
+</dl>
+ <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><strong>ChannelScope</strong> = <a name="ChannelScope">class NewClass</a>(ChannelScope)</font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt>This&nbsp;is&nbsp;the&nbsp;overwritten&nbsp;class<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
+<td width="100%">Methods defined here:<br>
+<dl><dt><a name="NewClass-__setattr__"><strong>__setattr__</strong></a>(self, name, value)</dt></dl>
+
+<hr>
+Methods inherited from ChannelScope:<br>
+<dl><dt><a name="NewClass-__init__"><strong>__init__</strong></a>(self, instrument, channel)</dt><dd><tt>Channel&nbsp;class&nbsp;for&nbsp;the&nbsp;oscilloscopes</tt></dd></dl>
+
+<dl><dt><a name="NewClass-acquire_y_raw"><strong>acquire_y_raw</strong></a>(self)</dt><dd><tt>acquire&nbsp;the&nbsp;raw&nbsp;curve&nbsp;of&nbsp;whatever&nbsp;channel&nbsp;is&nbsp;set&nbsp;in&nbsp;"set_channel"</tt></dd></dl>
+
+<dl><dt><a name="NewClass-acquire_y_raw_ascii"><strong>acquire_y_raw_ascii</strong></a>(self)</dt><dd><tt>acquire&nbsp;the&nbsp;raw&nbsp;curve&nbsp;of&nbsp;whatever&nbsp;channel&nbsp;is&nbsp;set&nbsp;in&nbsp;"set_channel"</tt></dd></dl>
+
+<dl><dt><a name="NewClass-coupling"><strong>coupling</strong></a>(self)</dt><dd><tt>return&nbsp;channel&nbsp;coupling</tt></dd></dl>
+
+<dl><dt><a name="NewClass-position"><strong>position</strong></a>(self)</dt><dd><tt>return&nbsp;channel&nbsp;position</tt></dd></dl>
+
+<dl><dt><a name="NewClass-probe"><strong>probe</strong></a>(self)</dt><dd><tt>return&nbsp;oscilloscope&nbsp;scale</tt></dd></dl>
+
+<dl><dt><a name="NewClass-read_channel"><strong>read_channel</strong></a>(self)</dt><dd><tt>returns&nbsp;a&nbsp;tuple&nbsp;with&nbsp;both&nbsp;the&nbsp;x&nbsp;and&nbsp;y&nbsp;axis&nbsp;already&nbsp;converted.&nbsp;It&nbsp;creates&nbsp;the&nbsp;x&nbsp;axis&nbsp;and&nbsp;reads&nbsp;the&nbsp;y&nbsp;axis&nbsp;from&nbsp;the&nbsp;channel&nbsp;set&nbsp;with&nbsp;the&nbsp;function&nbsp;"set_channel".&nbsp;The&nbsp;y&nbsp;acquisition&nbsp;is&nbsp;done&nbsp;using&nbsp;the&nbsp;function&nbsp;"acquire_y_raw"&nbsp;the&nbsp;converting&nbsp;factor&nbsp;by&nbsp;using&nbsp;the&nbsp;"waveform_conversion"&nbsp;function</tt></dd></dl>
+
+<dl><dt><a name="NewClass-read_preface"><strong>read_preface</strong></a>(self)</dt><dd><tt>return&nbsp;a&nbsp;list&nbsp;with&nbsp;the&nbsp;praface&nbsp;parameters</tt></dd></dl>
+
+<dl><dt><a name="NewClass-scale"><strong>scale</strong></a>(self)</dt><dd><tt>return&nbsp;channel&nbsp;scale</tt></dd></dl>
+
+<dl><dt><a name="NewClass-set_ac"><strong>set_ac</strong></a>(self)</dt><dd><tt>set&nbsp;channel&nbsp;coupling&nbsp;to&nbsp;AC</tt></dd></dl>
+
+<dl><dt><a name="NewClass-set_bandwidth_off"><strong>set_bandwidth_off</strong></a>(self, val)</dt><dd><tt>set&nbsp;channel&nbsp;bandwidth&nbsp;OFF</tt></dd></dl>
+
+<dl><dt><a name="NewClass-set_bandwidth_on"><strong>set_bandwidth_on</strong></a>(self, val)</dt><dd><tt>set&nbsp;channel&nbsp;bandwidth&nbsp;ON</tt></dd></dl>
+
+<dl><dt><a name="NewClass-set_dc"><strong>set_dc</strong></a>(self)</dt><dd><tt>set&nbsp;channel&nbsp;coupling&nbsp;to&nbsp;DC</tt></dd></dl>
+
+<dl><dt><a name="NewClass-set_dynamic_scale"><strong>set_dynamic_scale</strong></a>(self)</dt><dd><tt>dynamically&nbsp;scales&nbsp;the&nbsp;oscilloscope&nbsp;to&nbsp;the&nbsp;measurement.&nbsp;Only&nbsp;works&nbsp;if&nbsp;the&nbsp;offset&nbsp;is&nbsp;correct</tt></dd></dl>
+
+<dl><dt><a name="NewClass-set_ground"><strong>set_ground</strong></a>(self)</dt><dd><tt>set&nbsp;channel&nbsp;coupling&nbsp;to&nbsp;DC</tt></dd></dl>
+
+<dl><dt><a name="NewClass-set_invert_off"><strong>set_invert_off</strong></a>(self)</dt><dd><tt>set&nbsp;channel&nbsp;invert&nbsp;OFF</tt></dd></dl>
+
+<dl><dt><a name="NewClass-set_invert_on"><strong>set_invert_on</strong></a>(self)</dt><dd><tt>set&nbsp;channel&nbsp;invert&nbsp;ON</tt></dd></dl>
+
+<dl><dt><a name="NewClass-set_position"><strong>set_position</strong></a>(self, val)</dt><dd><tt>set&nbsp;channel&nbsp;position</tt></dd></dl>
+
+<dl><dt><a name="NewClass-set_probe"><strong>set_probe</strong></a>(self, val)</dt><dd><tt>set&nbsp;oscilloscope&nbsp;probe</tt></dd></dl>
+
+<dl><dt><a name="NewClass-set_scale"><strong>set_scale</strong></a>(self, val)</dt><dd><tt>set&nbsp;channel&nbsp;scale</tt></dd></dl>
+
+<dl><dt><a name="NewClass-set_smart_scale"><strong>set_smart_scale</strong></a>(self, log_step<font color="#909090">=10</font>, Vmax<font color="#909090">=4.0</font>, D<font color="#909090">=0.75</font>)</dt><dd><tt>dynamically&nbsp;scales&nbsp;the&nbsp;oscilloscope&nbsp;to&nbsp;the&nbsp;measurement.</tt></dd></dl>
+
+<dl><dt><a name="NewClass-waveform_conversion"><strong>waveform_conversion</strong></a>(self)</dt><dd><tt>return&nbsp;the&nbsp;waveform&nbsp;convertion&nbsp;values&nbsp;in&nbsp;the&nbsp;form<br>
+"[[x_zero,&nbsp;x_factor,&nbsp;x_offset],&nbsp;[y_zero,&nbsp;y_factor,&nbsp;y_offset]]"</tt></dd></dl>
+
+<dl><dt><a name="NewClass-waveform_conversion_no_header"><strong>waveform_conversion_no_header</strong></a>(self)</dt><dd><tt>return&nbsp;the&nbsp;waveform&nbsp;convertion&nbsp;values&nbsp;in&nbsp;the&nbsp;form<br>
+"[[x_zero,&nbsp;x_factor,&nbsp;x_offset],&nbsp;[y_zero,&nbsp;y_factor,&nbsp;y_offset]]"</tt></dd></dl>
+
+</td></tr></table> <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="Measure">class <strong>Measure</strong></a></font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt>#&nbsp;subclass&nbsp;with&nbsp;the&nbsp;measurements<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
+<td width="100%">Methods defined here:<br>
+<dl><dt><a name="Measure-Vpp"><strong>Vpp</strong></a>(self)</dt><dd><tt>measure&nbsp;the&nbsp;peak-to-peak&nbsp;voltage</tt></dd></dl>
+
+<dl><dt><a name="Measure-__init__"><strong>__init__</strong></a>(self, instrument, source)</dt><dd><tt>Make&nbsp;the&nbsp;all&nbsp;measure</tt></dd></dl>
+
+<dl><dt><a name="Measure-cycle_rms"><strong>cycle_rms</strong></a>(self)</dt><dd><tt>measure&nbsp;the&nbsp;RMS&nbsp;voltage&nbsp;in&nbsp;one&nbsp;period&nbsp;in&nbsp;V</tt></dd></dl>
+
+<dl><dt><a name="Measure-do_measure"><strong>do_measure</strong></a>(self, prop)</dt><dd><tt>measure&nbsp;the&nbsp;property&nbsp;on&nbsp;channel</tt></dd></dl>
+
+<dl><dt><a name="Measure-do_measure_no_header"><strong>do_measure_no_header</strong></a>(self, prop)</dt><dd><tt>measure&nbsp;the&nbsp;property&nbsp;on&nbsp;channel</tt></dd></dl>
+
+<dl><dt><a name="Measure-frequency"><strong>frequency</strong></a>(self)</dt><dd><tt>measure&nbsp;the&nbsp;frequency&nbsp;in&nbsp;Hz</tt></dd></dl>
+
+<dl><dt><a name="Measure-maximum"><strong>maximum</strong></a>(self)</dt><dd><tt>measure&nbsp;the&nbsp;maximum&nbsp;voltage&nbsp;in&nbsp;one&nbsp;period&nbsp;in&nbsp;V</tt></dd></dl>
+
+<dl><dt><a name="Measure-mean"><strong>mean</strong></a>(self)</dt><dd><tt>measure&nbsp;the&nbsp;average&nbsp;value</tt></dd></dl>
+
+<dl><dt><a name="Measure-minimum"><strong>minimum</strong></a>(self)</dt><dd><tt>measure&nbsp;the&nbsp;minimum&nbsp;voltage&nbsp;in&nbsp;the&nbsp;screen&nbsp;in&nbsp;V</tt></dd></dl>
+
+<dl><dt><a name="Measure-period"><strong>period</strong></a>(self)</dt><dd><tt>measure&nbsp;the&nbsp;period&nbsp;in&nbsp;s</tt></dd></dl>
+
+<dl><dt><a name="Measure-phase"><strong>phase</strong></a>(self)</dt><dd><tt>measure&nbsp;the&nbsp;phase</tt></dd></dl>
+
+<dl><dt><a name="Measure-rms"><strong>rms</strong></a>(self)</dt><dd><tt>measure&nbsp;the&nbsp;RMS&nbsp;voltage&nbsp;in&nbsp;the&nbsp;screen&nbsp;in&nbsp;V</tt></dd></dl>
+
+</td></tr></table> <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><strong>TektronixTBS1062</strong> = <a name="TektronixTBS1062">class NewClass</a>(TektronixTBS1062)</font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt>This&nbsp;is&nbsp;the&nbsp;overwritten&nbsp;class<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
+<td width="100%">Methods defined here:<br>
+<dl><dt><a name="NewClass-__setattr__"><strong>__setattr__</strong></a>(self, name, value)</dt></dl>
+
+<hr>
+Methods inherited from TektronixTBS1062:<br>
+<dl><dt><a name="NewClass-__init__"><strong>__init__</strong></a>(self)</dt><dd><tt>Classe&nbsp;para&nbsp;o&nbsp;osciloscópio</tt></dd></dl>
+
+<dl><dt><a name="NewClass-aquisition_params"><strong>aquisition_params</strong></a>(self)</dt><dd><tt>return&nbsp;the&nbsp;aquisition&nbsp;parameters</tt></dd></dl>
+
+<dl><dt><a name="NewClass-average_number"><strong>average_number</strong></a>(self)</dt><dd><tt>return&nbsp;the&nbsp;number&nbsp;of&nbsp;waveforms&nbsp;used&nbsp;in&nbsp;the&nbsp;average</tt></dd></dl>
+
+<dl><dt><a name="NewClass-clear"><strong>clear</strong></a>(self)</dt><dd><tt>The&nbsp;the&nbsp;Data&nbsp;structures&nbsp;of&nbsp;the&nbsp;Scope</tt></dd></dl>
+
+<dl><dt><a name="NewClass-close"><strong>close</strong></a>(self)</dt><dd><tt>close&nbsp;the&nbsp;instrument</tt></dd></dl>
+
+<dl><dt><a name="NewClass-cursor_params"><strong>cursor_params</strong></a>(self)</dt><dd><tt>return&nbsp;the&nbsp;cursos&nbsp;parameters</tt></dd></dl>
+
+<dl><dt><a name="NewClass-find_interface"><strong>find_interface</strong></a>(self)</dt><dd><tt>Function&nbsp;to&nbsp;extract&nbsp;the&nbsp;interface&nbsp;name&nbsp;for&nbsp;the&nbsp;Tektronics&nbsp;scope</tt></dd></dl>
+
+<dl><dt><a name="NewClass-get_active_channel"><strong>get_active_channel</strong></a>(self)</dt><dd><tt>return&nbsp;the&nbsp;active&nbsp;channel&nbsp;for&nbsp;the&nbsp;waveform&nbsp;aquisition</tt></dd></dl>
+
+<dl><dt><a name="NewClass-horizontal_position"><strong>horizontal_position</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="NewClass-horizontal_scale"><strong>horizontal_scale</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="NewClass-identify"><strong>identify</strong></a>(self)</dt><dd><tt>identify&nbsp;the&nbsp;equipment</tt></dd></dl>
+
+<dl><dt><a name="NewClass-query"><strong>query</strong></a>(self, msg)</dt><dd><tt>query&nbsp;from&nbsp;the&nbsp;instrument</tt></dd></dl>
+
+<dl><dt><a name="NewClass-read"><strong>read</strong></a>(self)</dt><dd><tt>read&nbsp;from&nbsp;the&nbsp;instrument</tt></dd></dl>
+
+<dl><dt><a name="NewClass-save_channels"><strong>save_channels</strong></a>(self, name, header<font color="#909090">=['time (s)', 'Channel 1 (V)', 'Channel 2 (V)']</font>, PATH<font color="#909090">=''</font>)</dt><dd><tt>save&nbsp;the&nbsp;the&nbsp;channels&nbsp;1&nbsp;and&nbsp;2&nbsp;and&nbsp;save&nbsp;the&nbsp;with&nbsp;the&nbsp;"header"&nbsp;in&nbsp;the&nbsp;"PATH"&nbsp;ad&nbsp;with&nbsp;the&nbsp;file&nbsp;name&nbsp;"name")</tt></dd></dl>
+
+<dl><dt><a name="NewClass-set_average"><strong>set_average</strong></a>(self)</dt><dd><tt>start&nbsp;average&nbsp;acquisition</tt></dd></dl>
+
+<dl><dt><a name="NewClass-set_average_number"><strong>set_average_number</strong></a>(self, msg)</dt><dd><tt>set&nbsp;the&nbsp;number&nbsp;of&nbsp;waveforms&nbsp;used&nbsp;in&nbsp;the&nbsp;average</tt></dd></dl>
+
+<dl><dt><a name="NewClass-set_horizontal_position"><strong>set_horizontal_position</strong></a>(self, val)</dt><dd><tt>set&nbsp;horizontal&nbsp;scale</tt></dd></dl>
+
+<dl><dt><a name="NewClass-set_horizontal_scale"><strong>set_horizontal_scale</strong></a>(self, val)</dt><dd><tt>set&nbsp;horizontal&nbsp;scale</tt></dd></dl>
+
+<dl><dt><a name="NewClass-set_sample"><strong>set_sample</strong></a>(self)</dt><dd><tt>start&nbsp;sample&nbsp;acquisition</tt></dd></dl>
+
+<dl><dt><a name="NewClass-start_acquisition"><strong>start_acquisition</strong></a>(self)</dt><dd><tt>start&nbsp;the&nbsp;aquisition&nbsp;of&nbsp;the&nbsp;waveform</tt></dd></dl>
+
+<dl><dt><a name="NewClass-stop_acquisition"><strong>stop_acquisition</strong></a>(self)</dt><dd><tt>stop&nbsp;the&nbsp;aquisition&nbsp;of&nbsp;the&nbsp;waveform</tt></dd></dl>
+
+<dl><dt><a name="NewClass-wait"><strong>wait</strong></a>(self)</dt><dd><tt>wait&nbsp;for&nbsp;the&nbsp;task&nbsp;to&nbsp;end</tt></dd></dl>
+
+<dl><dt><a name="NewClass-write"><strong>write</strong></a>(self, msg)</dt><dd><tt>write&nbsp;into&nbsp;the&nbsp;instrument</tt></dd></dl>
+
+</td></tr></table> <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><strong>Trigger</strong> = <a name="Trigger">class NewClass</a>(Trigger)</font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt>This&nbsp;is&nbsp;the&nbsp;overwritten&nbsp;class<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
+<td width="100%">Methods defined here:<br>
+<dl><dt><a name="NewClass-__setattr__"><strong>__setattr__</strong></a>(self, name, value)</dt></dl>
+
+<hr>
+Methods inherited from Trigger:<br>
+<dl><dt><a name="NewClass-__init__"><strong>__init__</strong></a>(self, instrument)</dt><dd><tt>Channel&nbsp;class&nbsp;for&nbsp;the&nbsp;oscilloscope&nbsp;trigger</tt></dd></dl>
+
+<dl><dt><a name="NewClass-coupling"><strong>coupling</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="NewClass-level"><strong>level</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="NewClass-set_coupling"><strong>set_coupling</strong></a>(self, val)</dt><dd><tt>set&nbsp;trigger&nbsp;coupling</tt></dd></dl>
+
+<dl><dt><a name="NewClass-set_level"><strong>set_level</strong></a>(self, val)</dt><dd><tt>set&nbsp;trigger&nbsp;level</tt></dd></dl>
+
+<dl><dt><a name="NewClass-set_slope_fall"><strong>set_slope_fall</strong></a>(self)</dt><dd><tt>set&nbsp;trigger&nbsp;slope&nbsp;fall</tt></dd></dl>
+
+<dl><dt><a name="NewClass-set_slope_rise"><strong>set_slope_rise</strong></a>(self)</dt><dd><tt>set&nbsp;trigger&nbsp;slope&nbsp;rise</tt></dd></dl>
+
+<dl><dt><a name="NewClass-set_source"><strong>set_source</strong></a>(self, source)</dt><dd><tt>set&nbsp;trigger&nbsp;source</tt></dd></dl>
+
+<dl><dt><a name="NewClass-set_to_50"><strong>set_to_50</strong></a>(self)</dt><dd><tt>set&nbsp;trigger&nbsp;level&nbsp;to&nbsp;50&nbsp;%</tt></dd></dl>
+
+<dl><dt><a name="NewClass-slope"><strong>slope</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="NewClass-source"><strong>source</strong></a>(self)</dt><dd><tt>return&nbsp;the&nbsp;trigger&nbsp;level</tt></dd></dl>
+
+<dl><dt><a name="NewClass-state"><strong>state</strong></a>(self)</dt><dd><tt>return&nbsp;the&nbsp;trigger&nbsp;state</tt></dd></dl>
+
+</td></tr></table></td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#eeaa77">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Functions</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#eeaa77"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><dl><dt><a name="-read_only_properties"><strong>read_only_properties</strong></a>(*attrs)</dt><dd><tt>decorator&nbsp;to&nbsp;make&nbsp;some&nbsp;class&nbsp;variables&nbsp;read-only<br>
+made&nbsp;by&nbsp;oz123&nbsp;from&nbsp;&nbsp;&nbsp;<br>
+https://github.com/oz123/oz123.github.com/blob/master/media/uploads/readonly_properties.py</tt></dd></dl>
+</td></tr></table>
+</body></html>
