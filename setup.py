@@ -2,7 +2,7 @@ import sys
 from setuptools import setup
 
 
-version = '0.0.1'
+version = '0.0.2'
 
 setup_requires = ['pytest-runner'] if \
     {'pytest', 'test', 'ptr'}.intersection(sys.argv) else []
