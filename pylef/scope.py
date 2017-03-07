@@ -1,10 +1,7 @@
 #-*- coding: utf-8 -*-
-################################
-##
-##  Class for the Tektronics 
-##  Osciloscopes
-##
-## @author: Felippe Barbosa
+
+""" Class for the Tektronics TBS1062 """
+
 #################################
 import visa   # interface with NI-Visa
 import numpy  # module for array manipulation
@@ -65,7 +62,7 @@ class TektronixTBS1062:
 
     def find_interface(self):
         """ 
-            Function to extract the interface name for the Tektronics scope
+            Extract the interface name for the Tektronics scope
         """
         resources = visa.ResourceManager().list_resources()
         instr_n = len(resources)
@@ -440,7 +437,7 @@ class Trigger:
 #
     def source(self):
         """ return the trigger level"""
-        return self.instr.query('TRIGGER:MAIN:EDGE:SOURCe?')[:-1]
+        return self.instr.query('TRIGGER:MAIN:EDGE:SOURCe?')[:-1].split(' ')[-1]
 #
     def set_level(self, val):
         """ set trigger level"""
