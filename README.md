@@ -3,23 +3,32 @@ Compilamos aqui as bibliotecas de aquisição de dados utilizados nos cursos do 
 
 A idéia deste projeto é criar drivers para comunicação com instrumentos utilizados nos cursos do IFGW. 
 Os drivers são implementados utilizandos classes do Python. A comunicação é realizada através do VISA (Virtual Instrument Software Architecture), em particular da biblioteca PyVISA. 
-Outras "imports" necessários para os drivers são:
 
-1. numpy
-2. os
-3. time
+# Requerimentos
+
+O pylef é construído em cima dos seguintes módulos:
+
+1. pyvisa
+2. numpy
 4. pandas
 
--------------------------
-# bk.py
-driver para comunicar com o gerador de sinal BK 4052.
-* [Página do instrumento no fabricante BK precision]( http://www.bkprecision.com/products/signal-generators/4052-5-mhz-dual-channel-function-arbitrary-waveform-generator.html)
+para instalá-los vá até um prompt de comando como administrador e execute o seguinte comando
+
+    pip install pyvisa numpy pandas
 
 -------------------------
-# tek.py
-driver para comunicar com o osciloscópio TekTronix TBS1062.
+# Instalação
+
+Para instalar o pylef, faça o download deste repositório, abra um prompt como administrador, vá até o diretório onde se encontra o repositório baixado e execute o seguinte comando
+
+    python setup.py install
+
+-------------------------
+# Instrumentos Suportados
+
+osciloscópio TekTronix TBS1062.
 * [Página do instrumento no fabricante Tektronix] (http://www.tek.com/oscilloscope/tbs1000-digital-storage-oscilloscope-manual)
 
--------------------------
-#example_0.ipynb: 
-iPython notebook (Jupyter) com exemplos básicos de comunicação
+gerador de funções BK 4052.
+* [Página do instrumento no fabricante BK precision]( http://www.bkprecision.com/products/signal-generators/4052-5-mhz-dual-channel-function-arbitrary-waveform-generator.html)
+
