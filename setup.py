@@ -1,5 +1,5 @@
 import sys
-from setuptools import setup, Extension
+from setuptools import setup
 
 
 version = '0.0.1'
@@ -27,6 +27,6 @@ setup(
     tests_require=[],
     platforms='OS Independent',
     classifiers=[
-        'Topic :: Scientific/Engineering/Education :: Instrument Control'
+        'Topic :: Scientific/Engineering :: Interface Engine/Protocol Translator'
     ],
     zip_safe=False)
