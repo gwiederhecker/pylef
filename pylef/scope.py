@@ -444,7 +444,7 @@ class Trigger:
         self.instr.write('TRIGGER:MAIN:LEVEL ' + str(val))
 #
     def level(self):
-        return float(self.instr.query('TRIGGER:MAIN:LEVEL?'))
+        return float(self.instr.query('TRIGGER:MAIN:LEVEL?').split()[-1])
 #
     def set_to_50(self):
         """ set trigger level to 50 % """
