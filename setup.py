@@ -2,7 +2,7 @@ import sys
 from setuptools import setup
 
 
-version = '0.0.3'
+version = '0.0.2'
 
 setup_requires = ['pytest-runner'] if \
     {'pytest', 'test', 'ptr'}.intersection(sys.argv) else []
@@ -11,7 +11,7 @@ setup(
     name='pylef',
     version=version,
     author='Felippe Barbosa',
-    author_email='felippebarbosa@gmail.com',
+    author_email='felippe.barbosa@gmail.com',
     license='MIT v1.0',
     url='https://github.com/gwiederhecker/pylef',
     description='Python module for controlling isntruments and support IFGW LEF',
