@@ -2,7 +2,7 @@ import sys
 from setuptools import setup
 
 
-version = '0.0.4'
+version = '0.0.5'
 
 
 setup_requires = ['pytest-runner'] if \
