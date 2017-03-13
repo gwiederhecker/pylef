@@ -185,7 +185,7 @@ class TektronixTBS1062:
         Usage
         -----
 
-            >>> import pylef.TBS1062 as scope
+            >>> import pylef.TektronixTBS1062 as scope
             >>> t, x, y = scope.save_channels('file_name', sep = ',')
 
         This code will save a file names 'file_name.dat' at 
@@ -234,7 +234,7 @@ class TektronixTBS1062:
         df[header[2]] = y  # set the channel 2
         ## time stamp and directory creation
         if time_stamp:
-            dir_name =  PATH + time.strftime('%Y_%m_%d\\', time.localtime(time.time())) # set directory name
+            dir_name = os.path.join(PATH,time.strftime('%Y_%m_%d', time.localtime(time.time()))) # set directory name
          # check the directory exist and create it automaticaly
             try: 
                 os.makedirs(dir_name)     # make new directory unless it already exists
@@ -242,7 +242,7 @@ class TektronixTBS1062:
                 if not os.path.isdir(dir_name):
                     raise
             time_stamp_suf = time.strftime('_%H_%M_%S', time.localtime(time.time()))
-            full_name = dir_name + name + time_stamp_suf
+            full_name = os.path.join(dir_name,name + time_stamp_suf)
         else: full_name = PATH + name    
         ## extension setting
         extension = extension.lower()  # set to lower case
@@ -263,7 +263,21 @@ class ChannelScope:
         self.instr = instrument  ## resource name
         self.channel = channel
         self.probe_list = [0.2, 1, 10, 20, 50, 100, 500, 1000]
+        self.state_list = {"1": "on", "0": "off"} 
         self.measure = Measure(instrument, channel)  
+#
+    def state(self):
+        """ check whether channel is on"""
+        return  self.state_list[self.instr.query('SELECT:'+self.channel+'?').split(' ')[-1][0]]
+#
+    def turn_on(self):
+        """ turn channel on"""
+        self.instr.write('SELECT:'+self.channel+' ON')
+        return  None
+#
+    def turn_off(self):
+        """ turn channel off"""
+        self.instr.write('SELECT:'+self.channel+' OFF')
 #
     def set_scale(self, val):
         """ set channel scale """
@@ -374,6 +388,9 @@ class ChannelScope:
 #
     def set_smart_scale(self, log_step = 10, Vmax = 4., D = 0.75):
         """ dynamically scales the oscilloscope to the measurement. """
+        #test whether channel is on
+        if self.state() == 'off':
+            raise ValueError('O canal %s está desligado!' % self.channel)
         keep_loop = True
         while keep_loop:
             scale, pos_div = self.scale(), self.position()
