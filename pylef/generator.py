@@ -1,6 +1,7 @@
 #-*- coding: utf-8 -*-
 
 import visa # interface with NI-Visa
+import time # time handling
 ################################
 def read_only_properties(*attrs):
     """
@@ -99,11 +100,12 @@ class BK4052:
         """
 
         self.id_bk = '0xF4ED'; # identificador do fabricante BK
+        self.wait_time = 0.1 # time to wait after write and query - BK BUG!
         interface_name = self.find_interface()
         # instrument initialization
         self.instr = visa.ResourceManager().open_resource(interface_name)   ## resource name
-        self.ch1 = ChannelFuncGen(self.instr, 'CH1')
-        self.ch2 = ChannelFuncGen(self.instr, 'CH2')
+        self.ch1 = ChannelFuncGen(self.instr, 'CH1', self.write, self.query)
+        self.ch2 = ChannelFuncGen(self.instr, 'CH2', self.write, self.query)
         self.instr.timeout = 10000 # set timeout to 10 seconds
         self.instr.chunk_size = 40960  # set the buffer size to 40 kB  
 
@@ -121,6 +123,7 @@ class BK4052:
             if fab_id == self.id_bk:
                 instr = visa.ResourceManager().open_resource(resource)
                 bk_str = instr.query('*IDN?')
+                time.sleep(self.wait_time)
                 resource_out = resource
                 print("Gerador de Funções conectado! Id = " + bk_str[:-1])
         if bk_str == '':
@@ -142,11 +145,15 @@ class BK4052:
 #
     def write(self, msg):
         """ write into the laser """
-        return self.instr.write(str(msg))
+        output = self.instr.write(str(msg))
+        time.sleep(self.wait_time)
+        return  output
 #
     def query(self, msg):
         """ query into the laser """
-        return self.instr.query(str(msg)) 
+        output = self.instr.query(str(msg))
+        time.sleep(self.wait_time)
+        return output
 #
     def read(self):
         """ read from the laser """
@@ -159,10 +166,12 @@ class BK4052:
 #######
 @read_only_properties('instrument', 'channel', 'functions', 'other_chan', 'dict_info', 'tag_volts', 'frequency_max', 'frequency_min', 'Vpp_max', 'Vpp_min', 'offset_max', 'offset_min', 'phase_max', 'phase_min', 'symmetry_max', 'symmetry_min', 'duty_max', 'duty_min', 'stdev_max', 'stdev_min', 'mean_max', 'mean_min', 'delay_max', 'delay_min')
 class ChannelFuncGen:
-    def __init__(self, instrument, channel):
+    def __init__(self, instrument, channel, write, query):
         """
             Class for the channels of the function generator
         """
+        self.query = query
+        self.write = write
         self.instr = instrument   ## resource name
         self.channel = channel
         self.functions = ['SINE', 'SQUARE', 'RAMP', 'PULSE', 'NOISE', 'ARB', 'DC']  # list of allowed functions
@@ -186,59 +195,61 @@ class ChannelFuncGen:
         self.stdev_max = 2.222   # maximum standard deviation in volts
         self.stdev_min = 0.4e-3     # minimum standard deviation in volts
         self.mean_max = 2.222   # maximum mean in volts
-        self.mean_min = 0.4e-3     # minimum mean in Voltse
+        self.mean_min = 0.0     # minimum mean in Voltse
         self.delay_max = 1000   # maximum delay in seconds
         self.delay_min = 0     # minimum duty delay in seconds
 
-# Basic Commands
+
+#
     def state(self):
         """ return the specified channel state """
-        return self.instr.query('C' + self.channel[-1] + ':OUTput?').split(' ')[1].split(',')[0]
+        #return self.instr.query('C' + self.channel[-1] + ':OUTput?').split(' ')[1].split(',')[0]
+        return self.query('C' + self.channel[-1] + ':OUTput?').split(' ')[1].split(',')[0]
 #    
     def turn_on(self):
         """ turn the specified channel ON """
-        self.instr.write('C' + self.channel[-1] + ':OUTput ON')
+        self.write('C' + self.channel[-1] + ':OUTput ON')
         return None
 #
     def turn_off(self):
         """ turn the specified channel OFF """
-        self.instr.write('C' + self.channel[-1] + ':OUTput OFF')
+        self.write('C' + self.channel[-1] + ':OUTput OFF')
         return None
 ####
     def sync(self):
         """ return the specified channel sync response """
-        return self.instr.query('C' + self.channel[-1] + ':SYNC?')
+        return self.query('C' + self.channel[-1] + ':SYNC?')
 #
     def sync_on(self):
         """ turn the specified channel sync ON """
-        self.instr.write('C' + self.channel[-1] + ':SYNC ON')
+        self.write('C' + self.channel[-1] + ':SYNC ON')
         return None
 #    
     def sync_off(self):
         """ turn the specified channel sync OFF """
-        self.instr.write('C' + self.channel[-1] + ':SYNC OFF')
+        self.write('C' + self.channel[-1] + ':SYNC OFF')
         return None
 #####
     def load(self):
         """ return the specified channel load """
-        return self.instr.query('C' + self.channel[-1] + ':OUTput?')[:-1].split(',')[-1]
+        return self.query('C' + self.channel[-1] + ':OUTput?')[:-1].split(',')[-1]
 #    
     def set_load_hz(self):
         """ set the channel load to HZ """
-        return self.instr.write('C' + self.channel[-1] + ':OUTput LOAD,HZ')
+        return self.write('C' + self.channel[-1] + ':OUTput LOAD,HZ')
 #
     def set_load_50(self):
         """ set the channel load to 50 Ohms """
-        return self.instr.write('C' + self.channel[-1] + ':OUTput LOAD,50')
+        return self.write('C' + self.channel[-1] + ':OUTput LOAD,50')
 ####
     def invert_on(self):
         """ turn the specified channel inversion ON"""
-        self.instr.write('C' + self.channel[-1] + ':INVerT ON')
+        self.write('C' + self.channel[-1] + ':INVerT ON')
         return None
 #    
     def invert_off(self):
         """ turn the specified channel inversion OFF """
-        self.instr.write('C' + self.channel[-1] + ':INVerT OFF')
+        self.write('C' + self.channel[-1] + ':INVerT OFF')
         return None   
 ####    
     def set_function(self, val):
@@ -246,7 +257,7 @@ class ChannelFuncGen:
         val = val.upper()  # convert to upper case
         if val in self.functions:
             cmd = 'C' + self.channel[-1] + ':BSWV WVTP,' + val
-            self.instr.write(cmd)
+            self.write(cmd)
         else:
             raise ValueError('The functions must be one of those: ' + ', '.join([l.lower() for l in self.functions]))
         return None
@@ -255,7 +266,7 @@ class ChannelFuncGen:
         """set the function generator frequency """
         if val <= self.frequency_max and val >= self.frequency_min:
             cmd = 'C' + self.channel[-1] + ':BSWV FRQ,' + str(float(val)) + 'Hz'
-            self.instr.write(cmd)
+            self.write(cmd)
         else: 
             raise ValueError("The frequency must be between %4.2f uHz and %4.2f MHz" % (1e6*self.frequency_min, 1e-6*self.frequency_max))                 
         return None    
@@ -264,7 +275,7 @@ class ChannelFuncGen:
         """set the function generator voltage peak-to-peak """
         if val <= self.Vpp_max and val >= self.Vpp_min:
             cmd = 'C' + self.channel[-1] + ':BSWV AMP,' + str(float(val)) + 'V'
-            self.instr.write(cmd)
+            self.write(cmd)
         else: 
             raise ValueError("The Vpp must be between %4.2f V and %4.2f V" % (self.Vpp_min, self.Vpp_max))                 
         return None
@@ -273,7 +284,7 @@ class ChannelFuncGen:
         """set the function generator offset """
         if val <= self.offset_max and val >= self.offset_min:
             cmd = 'C' + self.channel[-1] + ':BSWV OFST,' + str(float(val)) + 'V'
-            self.instr.write(cmd)
+            self.write(cmd)
         else: 
             raise ValueError("The offset must be between %4.2f V and %4.2f V" % (self.offset_min, self.offset_max))                 
         return None    
@@ -282,7 +293,7 @@ class ChannelFuncGen:
         """set the function generator phase """
         if val <= self.phase_max and val >= self.phase_min:
             cmd = 'C' + self.channel[-1] + ':BSWV PHSE,' + str(float(val))
-            self.instr.write(cmd)
+            self.write(cmd)
         else: 
             raise ValueError("The phase must be between %4.2f and %4.2f degrees" % (self.phase_min, self.phase_max))                 
         return None
@@ -291,7 +302,7 @@ class ChannelFuncGen:
         """set the function generator signal symmetry """
         if val <= self.symmetry_max and val >= self.symmetry_min:
             cmd = 'C' + self.channel[-1] + ':BSWV SYM,' + str(float(val))
-            self.instr.write(cmd)
+            self.write(cmd)
         else: 
             raise ValueError("The symmetry must be between %4.0f and %4.0f percent" % (self.symmetry_min, self.symmetry_max))                 
         return None  
@@ -300,7 +311,7 @@ class ChannelFuncGen:
         """set the function generator duty cycle """
         if val <= self.duty_max and val >= self.duty_min:
             cmd = 'C' + self.channel[-1] + ':BSWV DUTY,' + str(float(val))
-            self.instr.write(cmd)
+            self.write(cmd)
         else: 
             raise ValueError("The duty cycle must be between %4.0f and %4.0f percent" % (self.duty_min, self.duty_max))                 
         return None
@@ -309,7 +320,7 @@ class ChannelFuncGen:
         """set the function generator mean in Volts"""
         if val <= self.mean_max and val >= self.mean_min:
             cmd = 'C' + self.channel[-1] + ':BSWV MEAN,' + str(float(val)) + 'V'
-            self.instr.write(cmd)
+            self.write(cmd)
         else: 
             raise ValueError("The noise mean must be between %4.2f V and %4.2f V" % (self.mean_min, self.mean_max))                 
         return None
@@ -318,7 +329,7 @@ class ChannelFuncGen:
         """set the noise function generator standard deviation in Volts"""
         if val <= self.stdev_max and val >= self.stdev_min:
             cmd = 'C' + self.channel[-1] + ':BSWV STDEV,' + str(float(val)) + 'V'
-            self.instr.write(cmd)
+            self.write(cmd)
         else: 
             raise ValueError("The standard deviation must be between %4.0f V and %4.0f V" % (self.stdev_min, self.stdev_max))                 
         return None
@@ -327,14 +338,14 @@ class ChannelFuncGen:
         """set the function generator pulse delay in seconds """
         if val <= self.delay_max and val >= self.delay_min:
             cmd = 'C' + self.channel[-1] + ':BSWV DLY,' + str(float(val)) + 'S'
-            self.instr.write(cmd)
+            self.write(cmd)
         else: 
             raise ValueError("The delay must be between %4.0f s and %4.0f s" % (self.delay_min, self.delay_max))                 
         return None
 #
     def wave_info(self, raw_output = False):
         """return the wave information for "channel". If raw_output = True, the output from the function is returned without processing"""
-        output = self.instr.query('C' + self.channel[-1] + ':BSWV?')
+        output = self.query('C' + self.channel[-1] + ':BSWV?')
         if not raw_output:
             info = output.split(' ')[-1][:-1].split(',') 
             info_tags, info_vals = info[0:][::2], info[1:][::2]
@@ -355,14 +366,14 @@ class ChannelFuncGen:
         """
             copy the parameters to this channel from the other channel 
         """
-        self.instr.write('PAraCoPy C' + self.other_chan[self.channel] + ',C' + self.channel[-1])
+        self.write('PAraCoPy C' + self.other_chan[self.channel] + ',C' + self.channel[-1])
         return None
 #          
     def copy_from(self):
         """
             copy the parameters from this channel to the other channel 
         """
-        self.instr.write('PAraCoPy C' + self.channel[-1] + ',C' + self.other_chan[self.channel])
+        self.write('PAraCoPy C' + self.channel[-1] + ',C' + self.other_chan[self.channel])
         return None
 
 
