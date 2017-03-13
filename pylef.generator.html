@@ -9,15 +9,7 @@
 <font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong><a href="pylef.html"><font color="#ffffff">pylef</font></a>.generator</strong></big></big></font></td
 ><td align=right valign=bottom
 ><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:/home/felippe/Dropbox/git-repos/pylef/pylef/generator.py">/home/felippe/Dropbox/git-repos/pylef/pylef/generator.py</a></font></td></tr></table>
-    <p><tt>#-*-&nbsp;coding:&nbsp;utf-8&nbsp;-*-<br>
-################################<br>
-##<br>
-##&nbsp;&nbsp;Class&nbsp;for&nbsp;the&nbsp;function&nbsp;generator<br>
-##&nbsp;&nbsp;BK&nbsp;&nbsp;<br>
-##<br>
-##&nbsp;@author:&nbsp;Felippe&nbsp;Barbosa<br>
-##<br>
-#################################</tt></p>
+    <p><tt>#-*-&nbsp;coding:&nbsp;utf-8&nbsp;-*-</tt></p>
 <p>
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
 <tr bgcolor="#aa55cc">
@@ -61,7 +53,69 @@
 
 <hr>
 Methods inherited from BK4052:<br>
-<dl><dt><a name="NewClass-__init__"><strong>__init__</strong></a>(self)</dt><dd><tt>Gerador&nbsp;de&nbsp;funções</tt></dd></dl>
+<dl><dt><a name="NewClass-__init__"><strong>__init__</strong></a>(self)</dt><dd><tt><a href="#BK4052">BK4052</a><br>
+=========<br>
+&nbsp;<br>
+This&nbsp;is&nbsp;a&nbsp;virtual&nbsp;object&nbsp;that&nbsp;represents&nbsp;the&nbsp;arbitrary&nbsp;function&nbsp;<br>
+generator&nbsp;<a href="#BK4052">BK4052</a>&nbsp;and&nbsp;mimics&nbsp;it's&nbsp;behaviour.&nbsp;The&nbsp;user&nbsp;should&nbsp;<br>
+interact&nbsp;with&nbsp;this&nbsp;object&nbsp;in&nbsp;the&nbsp;same&nbsp;fashion&nbsp;he&nbsp;or&nbsp;she&nbsp;interacts&nbsp;<br>
+with&nbsp;the&nbsp;function&nbsp;generator.&nbsp;As&nbsp;it&nbsp;is&nbsp;the&nbsp;case&nbsp;for&nbsp;the&nbsp;real&nbsp;function&nbsp;<br>
+generator,&nbsp;we&nbsp;have&nbsp;independent&nbsp;access&nbsp;to&nbsp;the&nbsp;both&nbsp;channels,&nbsp;which&nbsp;<br>
+are&nbsp;represented&nbsp;by&nbsp;"ch1"&nbsp;and&nbsp;"ch2".<br>
+&nbsp;<br>
+The&nbsp;instrument&nbsp;has&nbsp;a&nbsp;"identify"&nbsp;function&nbsp;that&nbsp;returns&nbsp;the&nbsp;instrument<br>
+information&nbsp;and&nbsp;3&nbsp;pyvisa&nbsp;wrapped&nbsp;functions:&nbsp;"read",&nbsp;"write",&nbsp;"query"&nbsp;<br>
+and&nbsp;"close"&nbsp;(go&nbsp;to&nbsp;pyvisa&nbsp;documentation&nbsp;for&nbsp;more&nbsp;detail).&nbsp;There&nbsp;is&nbsp;also<br>
+a&nbsp;function&nbsp;"find_interface"&nbsp;that&nbsp;automatic&nbsp;find&nbsp;in&nbsp;which&nbsp;USB&nbsp;port<br>
+the&nbsp;function&nbsp;generator&nbsp;is&nbsp;connected.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+Usage:<br>
+&nbsp;<br>
+&gt;&gt;&gt;&nbsp;import&nbsp;pylef&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#&nbsp;import&nbsp;the&nbsp;pylef&nbsp;package<br>
+&gt;&gt;&gt;&nbsp;instrument&nbsp;=&nbsp;pylef.<a href="#BK4052">BK4052</a>()&nbsp;&nbsp;#&nbsp;define&nbsp;the&nbsp;instrument<br>
+&gt;&gt;&gt;&nbsp;instrument.idenfify()&nbsp;&nbsp;&nbsp;#&nbsp;idenfity&nbsp;the&nbsp;instrument<br>
+&nbsp;<br>
+The&nbsp;channels&nbsp;are&nbsp;independently&nbsp;defined&nbsp;and&nbsp;accessed.&nbsp;For&nbsp;each&nbsp;one&nbsp;of&nbsp;<br>
+them&nbsp;we&nbsp;can&nbsp;set&nbsp;up&nbsp;the&nbsp;function&nbsp;properties,&nbsp;such&nbsp;as&nbsp;'frequency'&nbsp;and&nbsp;<br>
+'peak-to-peak&nbsp;voltage'&nbsp;and&nbsp;many&nbsp;channel&nbsp;attibutes,&nbsp;such&nbsp;as&nbsp;'inversion',<br>
+'load&nbsp;impedance'&nbsp;and&nbsp;'TTL&nbsp;sync&nbsp;output'.&nbsp;We&nbsp;can&nbsp;also,&nbsp;turn&nbsp;the&nbsp;channels<br>
+ON&nbsp;and&nbsp;OFF.<br>
+&nbsp;<br>
+&gt;&gt;&gt;&nbsp;channel1&nbsp;=&nbsp;instrument.ch1()&nbsp;&nbsp;&nbsp;#&nbsp;define&nbsp;channel&nbsp;1<br>
+&gt;&gt;&gt;&nbsp;channel1.turn_on()&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#&nbsp;turn&nbsp;channel&nbsp;1&nbsp;ON<br>
+&gt;&gt;&gt;&nbsp;channel1.sync_on()&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#&nbsp;turn&nbsp;the&nbsp;TTL&nbsp;sync&nbsp;output&nbsp;for&nbsp;channel&nbsp;1&nbsp;<br>
+&nbsp;<br>
+The&nbsp;most&nbsp;important&nbsp;is&nbsp;the&nbsp;'function&nbsp;type',&nbsp;which&nbsp;can&nbsp;be&nbsp;one&nbsp;of&nbsp;those:<br>
+'SINE',&nbsp;'SQUARE',&nbsp;'RAMP',&nbsp;'PULSE',&nbsp;'NOISE',&nbsp;'ARB',&nbsp;'DC'&nbsp;and&nbsp;each&nbsp;one&nbsp;of&nbsp;<br>
+them&nbsp;are&nbsp;defined&nbsp;by&nbsp;a&nbsp;particular&nbsp;set&nbsp;of&nbsp;properties.&nbsp;Those&nbsp;properties&nbsp;are<br>
+one&nbsp;of:&nbsp;'frequency',&nbsp;'Vpp',&nbsp;'offset',&nbsp;'phase',&nbsp;'symmetry',&nbsp;'duty',&nbsp;'mean',<br>
+'stdev',&nbsp;'delay'.&nbsp;Some&nbsp;of&nbsp;those&nbsp;properties&nbsp;are&nbsp;share&nbsp;by&nbsp;more&nbsp;the&nbsp;one&nbsp;<br>
+function&nbsp;type&nbsp;and&nbsp;some&nbsp;are&nbsp;privative&nbsp;to&nbsp;only&nbsp;one&nbsp;type.&nbsp;For&nbsp;example,&nbsp;'SINE',&nbsp;<br>
+'SQUARE',&nbsp;'RAMP',&nbsp;'ARB'&nbsp;and&nbsp;'PULSE'&nbsp;have&nbsp;the&nbsp;'frequency'&nbsp;and&nbsp;'Vpp'&nbsp;properties<br>
+while&nbsp;'noise'&nbsp;type&nbsp;is&nbsp;the&nbsp;only&nbsp;one&nbsp;who&nbsp;has&nbsp;the&nbsp;'mean'&nbsp;and&nbsp;'stded'&nbsp;properties.&nbsp;<br>
+&nbsp;<br>
+Usage:<br>
+&nbsp;<br>
+&gt;&gt;&gt;&nbsp;channel1.set_function('ramp')&nbsp;&nbsp;#&nbsp;create&nbsp;a&nbsp;triangular&nbsp;wave<br>
+&gt;&gt;&gt;&nbsp;channel1.set_frequency(100)&nbsp;&nbsp;&nbsp;&nbsp;#&nbsp;set&nbsp;the&nbsp;frequency&nbsp;to&nbsp;100&nbsp;Hz&nbsp;<br>
+&gt;&gt;&gt;&nbsp;channel1.set_Vpp(2)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#&nbsp;set&nbsp;the&nbsp;peak-to-peak&nbsp;voltage&nbsp;to&nbsp;2&nbsp;V<br>
+&gt;&gt;&gt;&nbsp;channel1.set_frequency()<br>
+&nbsp;<br>
+&gt;&gt;&gt;&nbsp;channel2.turn_on()&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#&nbsp;turn&nbsp;channel&nbsp;2&nbsp;ON<br>
+&gt;&gt;&gt;&nbsp;channel2.set_function('noise')&nbsp;&nbsp;#&nbsp;create&nbsp;a&nbsp;noise<br>
+&gt;&gt;&gt;&nbsp;channel2.set_mean(0)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#&nbsp;set&nbsp;the&nbsp;average&nbsp;0&nbsp;V<br>
+&gt;&gt;&gt;&nbsp;channel2.set_stdev(0.5)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#&nbsp;set&nbsp;the&nbsp;standard&nbsp;deviation&nbsp;to&nbsp;0.5&nbsp;V&nbsp;<br>
+&nbsp;&nbsp;<br>
+The&nbsp;function&nbsp;"wave_info"&nbsp;returns&nbsp;a&nbsp;python&nbsp;dictionay&nbsp;with&nbsp;the&nbsp;particular&nbsp;wave<br>
+information<br>
+&nbsp;<br>
+Usage:<br>
+&nbsp;<br>
+&gt;&gt;&gt;&nbsp;info1&nbsp;=&nbsp;channel1.wave_info()&nbsp;&nbsp;&nbsp;#&nbsp;current&nbsp;wave&nbsp;information&nbsp;of&nbsp;channel&nbsp;1<br>
+&gt;&gt;&gt;&nbsp;print(info1['frequency'])&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#&nbsp;will&nbsp;return&nbsp;100<br>
+&gt;&gt;&gt;&nbsp;print(info1['type'])&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#&nbsp;will&nbsp;return&nbsp;ramp<br>
+&gt;&gt;&gt;&nbsp;info2&nbsp;=&nbsp;channel2.wave_info()&nbsp;&nbsp;&nbsp;#&nbsp;current&nbsp;wave&nbsp;information&nbsp;of&nbsp;channel&nbsp;2<br>
+&gt;&gt;&gt;&nbsp;print(info2['stdev'])&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#&nbsp;will&nbsp;return&nbsp;0.5</tt></dd></dl>
 
 <dl><dt><a name="NewClass-close"><strong>close</strong></a>(self)</dt><dd><tt>close&nbsp;the&nbsp;instrument</tt></dd></dl>
 
