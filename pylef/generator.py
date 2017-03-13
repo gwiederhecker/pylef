@@ -186,7 +186,7 @@ class ChannelFuncGen:
         self.stdev_max = 2.222   # maximum standard deviation in volts
         self.stdev_min = 0.4e-3     # minimum standard deviation in volts
         self.mean_max = 2.222   # maximum mean in volts
-        self.mean_min = 0.4e-3     # minimum mean in Voltse
+        self.mean_min = 0.0     # minimum mean in Voltse
         self.delay_max = 1000   # maximum delay in seconds
         self.delay_min = 0     # minimum duty delay in seconds
 

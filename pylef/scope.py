@@ -178,31 +178,80 @@ class TektronixTBS1062:
 
     
 ############## Saving functions ##### (They shouldn' t be here!!)
-    def save_channels(self, name, header = ['time (s)', 'Channel 1 (V)', 'Channel 2 (V)'], PATH = ''):
-        """ save the the channels 1 and 2 and save the with the "header" in the "PATH" ad with the file name "name") """
+    def save_channels(self, name, header = ['time (s)', 'Channel 1 (V)', 'Channel 2 (V)'], PATH = '', extension = '.dat', sep = '\t', time_stamp = True):
+        """ Saves on file the channels 1 and 2 as well as
+        the time sweep
+        
+        Usage
+        -----
+
+            >>> import pylef.TBS1062 as scope
+            >>> t, x, y = scope.save_channels('file_name', sep = ',')
+
+        This code will save a file names 'file_name.dat' at 
+        the working directory and with comma separation. You
+        also use the arrays t, x and y to data processing and
+        plotting. For example, the Lissajous figure can be 
+        plotted as 
+
+            >>> plt.plot(x, y)
+            >>> plt.show()
+
+        Parameters
+        -----------
+        name: string
+            File name to be saved
+        header: 3-parameter list - optional
+            List with the name of the header for the 3 array-like 
+            data in the format [time, channel 1, channel 2 ] 
+        PATH: PATH-like string - optional 
+            PATH for where the dada should be saved 
+        extension: string - optional
+            Extesions should be one of '.dat', '.csv', '.txt'
+        sep: sting - optional
+            Separator. Normally used are ',', '.', ' ', '\t'
+        time_stamp: boolean
+            Makes a time stamp file system and adds a time stamp 
+            the end of each file
+        Returns
+        --------
+
+        t, x, y = tuple 
+            t: array-like time parameter
+            x: array-like channel 1
+            y: array-like channel 2
+        
+        """
 ##### reading and setting directory name
-        x, y1 = self.ch1.read_channel()   # read channel 1
-        x0, y2 = self.ch2.read_channel()   # read channel 2
-        dir_name =  PATH + time.strftime('%Y_%m_%d\\', time.localtime(time.time())) # set directory name
-        # check the directory exist and create it automaticaly
-        try: 
-            os.makedirs(dir_name)     # make new directory unless it already exists
-        except OSError:
-            if not os.path.isdir(dir_name):
-                raise
+        t, x = self.ch1.read_channel()   # read channel 1
+        t0, y = self.ch2.read_channel()   # read channel 2
 ###### name of the file        
-        Npts = x.shape[0]
+        Npts = t.shape[0]
         indexh = range(Npts)
-        df = pandas.DataFrame(columns = header, index = indexh)    # initialization of the filtered dataframe        
-        df[header[0]] = x
-        df[header[1]] = y1
-        df[header[2]] = y2
-#
-        time_stamp_suf = time.strftime('_%H_%M_%S', time.localtime(time.time()))
-        full_name = dir_name + name + time_stamp_suf        
-        df.to_csv(full_name + '.csv')
-        print('... file => ' + name + time_stamp_suf + ' saved!!')
-        return x, y1, y2
+        df = pandas.DataFrame(columns = header, index = indexh)  # initialization of the filtered dataframe        
+        df[header[0]] = t  # set the t variable
+        df[header[1]] = x  # set the channel 1
+        df[header[2]] = y  # set the channel 2
+        ## time stamp and directory creation
+        if time_stamp:
+            dir_name =  PATH + time.strftime('%Y_%m_%d\\', time.localtime(time.time())) # set directory name
+         # check the directory exist and create it automaticaly
+            try: 
+                os.makedirs(dir_name)     # make new directory unless it already exists
+            except OSError:
+                if not os.path.isdir(dir_name):
+                    raise
+            time_stamp_suf = time.strftime('_%H_%M_%S', time.localtime(time.time()))
+            full_name = dir_name + name + time_stamp_suf
+        else: full_name = PATH + name    
+        ## extension setting
+        extension = extension.lower()  # set to lower case
+        if extension not in ['.dat', '.csv', '.txt']:
+            extension = '.dat'
+            print("Your file will be saved as a '.dat'. The extension should be one of those: '.dat', '.csv' and '.txt'")
+        df.to_csv(full_name + extension, sep = sep)  # save data
+        print('... file => %s saved !!' % full_name)
+        return t, x, y
 
 ##
 @read_only_properties('instrument', 'channel', 'probe_list')
