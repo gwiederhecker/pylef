@@ -19,9 +19,9 @@ para instalá-los vá até um prompt de comando como administrador e execute o s
 -------------------------
 # Instalação
 
-Para instalar o pylef, faça o download deste repositório, abra um prompt como administrador, vá até o diretório onde se encontra o repositório baixado e execute o seguinte comando
+O pylef também pode ser instalado pelo pip. Abra um prompt como administrador e execute o seguinte comando
 
-    python setup.py install
+    pip install pylef
 
 -------------------------
 # Instrumentos Suportados
