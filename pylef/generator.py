@@ -105,6 +105,7 @@ class BK4052:
         # instrument initialization
         self.instr = visa.ResourceManager().open_resource(interface_name)   ## resource name
         self.instr.timeout = 10000 # set timeout to 10 seconds
+        self.instr.delay = 0.2 # set timeout to 10 seconds
         self.ch1 = ChannelFuncGen(self.instr, 'CH1', self.write, self.query)
         self.ch2 = ChannelFuncGen(self.instr, 'CH2', self.write, self.query)
         self.instr.chunk_size = 40960  # set the buffer size to 40 kB  
