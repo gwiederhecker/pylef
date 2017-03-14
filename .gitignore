@@ -10,3 +10,6 @@
 # html doc files
 
 *.html
+
+# IPyNB swap files
+.*.swp
