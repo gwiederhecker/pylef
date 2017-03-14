@@ -122,8 +122,9 @@ class BK4052:
             fab_id = resource.split('::')[1]
             if fab_id == self.id_bk:
                 instr = visa.ResourceManager().open_resource(resource)
+                instr.timeout = 10000 # set timeout to 10 seconds
                 bk_str = instr.query('*IDN?')
-                time.sleep(1)
+                #time.sleep(1)
                 resource_out = resource
                 print("Gerador de Funções conectado! Id = " + bk_str[:-1])
         if bk_str == '':
