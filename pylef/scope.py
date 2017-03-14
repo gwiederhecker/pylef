@@ -75,6 +75,7 @@ class TektronixTBS1062:
             fab_id = resource.split('::')[1]
             if fab_id == self.id_tek:
                 instr = visa.ResourceManager().open_resource(resource)
+                instr.timeout = 10000 # set timeout to 10 seconds
                 tek_str = instr.query('*IDN?')
                 resource_out = resource
                 print("Osciloscópio conectado! Id = " + tek_str[:-1])
