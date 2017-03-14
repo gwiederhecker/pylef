@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-PyLEF
+PyLEF v0.0.8
 ==== 
 
 Compilamos aqui as bibliotecas de aquisição de dados 
