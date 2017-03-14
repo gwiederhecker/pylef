@@ -123,7 +123,9 @@ class BK4052:
             if fab_id == self.id_bk:
                 instr = visa.ResourceManager().open_resource(resource)
                 instr.timeout = 10000 # set timeout to 10 seconds
-                bk_str = instr.query('*IDN?')
+                #bk_str = instr.query('*IDN?')
+                instr.write('*IDN?')
+                bk_str = instr.read()
                 #time.sleep(1)
                 resource_out = resource
                 print("Gerador de Funções conectado! Id = " + bk_str[:-1])
@@ -152,7 +154,9 @@ class BK4052:
 #
     def query(self, msg):
         """ query into the laser """
-        output = self.instr.query(str(msg))
+        self.instr.write(str(msg))
+        time.sleep(0.1)
+        output = self.instr.read()
         time.sleep(self.wait_time)
         return output
 #
@@ -344,9 +348,10 @@ class ChannelFuncGen:
             raise ValueError("The delay must be between %4.0f s and %4.0f s" % (self.delay_min, self.delay_max))                 
         return None
 #
-    def wave_info(self, raw_output = False):
+    def wave_info(self, raw_output = True):
         """return the wave information for "channel". If raw_output = True, the output from the function is returned without processing"""
-        output = self.query('C' + self.channel[-1] + ':BSWV?')
+        self.write('C' + self.channel[-1] + ':BSWV?')
+        output = self.instr.read()
         if not raw_output:
             info = output.split(' ')[-1][:-1].split(',') 
             info_tags, info_vals = info[0:][::2], info[1:][::2]
