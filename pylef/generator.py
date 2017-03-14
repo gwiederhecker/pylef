@@ -100,7 +100,7 @@ class BK4052:
         """
 
         self.id_bk = '0xF4ED'; # identificador do fabricante BK
-        self.wait_time = 0.1 # time to wait after write and query - BK BUG!
+        self.wait_time = 0.5 # time to wait after write and query - BK BUG!
         interface_name = self.find_interface()
         # instrument initialization
         self.instr = visa.ResourceManager().open_resource(interface_name)   ## resource name
@@ -123,7 +123,7 @@ class BK4052:
             if fab_id == self.id_bk:
                 instr = visa.ResourceManager().open_resource(resource)
                 bk_str = instr.query('*IDN?')
-                time.sleep(self.wait_time)
+                time.sleep(1)
                 resource_out = resource
                 print("Gerador de Funções conectado! Id = " + bk_str[:-1])
         if bk_str == '':
