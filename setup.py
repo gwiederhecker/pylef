@@ -5,7 +5,7 @@ import codecs
 from setuptools import setup
 
 
-version = '0.0.95'
+version = '0.1.0'
 
 HERE = os.path.abspath(os.path.dirname(__file__))
 

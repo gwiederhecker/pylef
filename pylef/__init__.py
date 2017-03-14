@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-PyLEF v0.0.95
+PyLEF v0.1.0
 
 Compilamos aqui as bibliotecas de aquisição de dados 
 utilizados nos cursos do Laboratório de Ensino de 
