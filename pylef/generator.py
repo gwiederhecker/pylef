@@ -100,12 +100,12 @@ class BK4052:
         """
 
         self.id_bk = '0xF4ED'; # identificador do fabricante BK
-        self.wait_time = 0.5 # time to wait after write and query - BK BUG!
+        self.delay_time = 0.5 # time to wait after write and query - BK BUG!
         interface_name = self.find_interface()
         # instrument initialization
         self.instr = visa.ResourceManager().open_resource(interface_name)   ## resource name
         self.instr.timeout = 10000 # set timeout to 10 seconds
-        self.instr.delay = 0.2 # set timeout to 10 seconds
+        #self.instr.delay = 1.0 #delay for query
         self.ch1 = ChannelFuncGen(self.instr, 'CH1', self.write, self.query)
         self.ch2 = ChannelFuncGen(self.instr, 'CH2', self.write, self.query)
         self.instr.chunk_size = 40960  # set the buffer size to 40 kB  
@@ -124,9 +124,9 @@ class BK4052:
             if fab_id == self.id_bk:
                 instr = visa.ResourceManager().open_resource(resource)
                 instr.timeout = 10000 # set timeout to 10 seconds
-                #bk_str = instr.query('*IDN?')
-                instr.write('*IDN?')
-                bk_str = instr.read()
+                bk_str = instr.query('*IDN?', delay = self.delay_time)
+                #instr.write('*IDN?');time.sleep(1.0)
+                #bk_str = instr.read()
                 #time.sleep(1)
                 resource_out = resource
                 print("Gerador de Funções conectado! Id = " + bk_str[:-1])
@@ -145,22 +145,16 @@ class BK4052:
 #
     def wait(self):
         """ wait for the task to end """
-        return self.instr.query('*OPC?')
+        return self.instr.query('*OPC?', delay = self.delay_time)
 #
     def write(self, msg):
         """ write into the laser """
-        output = self.instr.write(str(msg))
-        time.sleep(self.wait_time)
-        return  output
-#
+        return self.instr.write(str(msg))
+        
     def query(self, msg):
         """ query into the laser """
-        self.instr.write(str(msg))
-        time.sleep(0.1)
-        output = self.instr.read()
-        time.sleep(self.wait_time)
-        return output
-#
+        return self.instr.query(str(msg), delay = self.delay_time)
+     
     def read(self):
         """ read from the laser """
         return self.instr.read()    
@@ -183,8 +177,9 @@ class ChannelFuncGen:
         self.functions = ['SINE', 'SQUARE', 'RAMP', 'PULSE', 'NOISE', 'ARB', 'DC']  # list of allowed functions
         self.other_chan = {'CH1':'2', 'CH2':'1'}
         self.dict_info = {'WVTP':'type', 'FRQ':'frequency', 'AMP':'Vpp', 'OFST':'offset', 'PHSE':'phase', 
-             'DUTY':'duty_cycle', 'SYM':'symmetry', 'DLY':'delay', 'STDEV':'stdev', 'MEAN':'mean'}
-        self.tag_volts = ['Vpp', 'mean', 'stdev', 'offset']
+             'DUTY':'duty_cycle', 'SYM':'symmetry', 'DLY':'delay', 'STDEV':'stdev', 'MEAN':'mean', 'PERI':'period', 
+			 'LLEV':'low_level', 'HLEV':'high_level'}
+        self.tag_volts_secs = ['Vpp', 'mean', 'stdev', 'offset', 'low_level', 'high_level', 'period']
         # instrument limits
         self.frequency_max = 5.0e6  # maximum freqeuncy in Hertz
         self.frequency_min = 1.0e-6   # minimum freqeuncy in Hertz
@@ -204,8 +199,6 @@ class ChannelFuncGen:
         self.mean_min = 0.0     # minimum mean in Voltse
         self.delay_max = 1000   # maximum delay in seconds
         self.delay_min = 0     # minimum duty delay in seconds
-
-
 #
     def state(self):
         """ return the specified channel state """
@@ -349,10 +342,9 @@ class ChannelFuncGen:
             raise ValueError("The delay must be between %4.0f s and %4.0f s" % (self.delay_min, self.delay_max))                 
         return None
 #
-    def wave_info(self, raw_output = True):
+    def wave_info(self, raw_output = False):
         """return the wave information for "channel". If raw_output = True, the output from the function is returned without processing"""
-        self.write('C' + self.channel[-1] + ':BSWV?')
-        output = self.instr.read()
+        output = self.query('C' + self.channel[-1] + ':BSWV?')
         if not raw_output:
             info = output.split(' ')[-1][:-1].split(',') 
             info_tags, info_vals = info[0:][::2], info[1:][::2]
@@ -360,7 +352,7 @@ class ChannelFuncGen:
             output = {}
             for n in list(range(N)):
                 tag = self.dict_info[info_tags[n]]
-                if tag in self.tag_volts:
+                if tag in self.tag_volts_secs:
                     val = float(info_vals[n][:-1])
                 elif tag == 'frequency':
                     val = float(info_vals[n][:-2])
