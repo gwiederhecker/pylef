@@ -1,0 +1,4 @@
+Início Rápido
+=============
+
+.. automodule:: pylef
