@@ -13,3 +13,6 @@
 
 # IPyNB swap files
 .*.swp
+
+# Sphinx build
+docs/_build/*

@@ -1,1 +1,0 @@
-Search.setIndex({envversion:50,filenames:["index"],objects:{},objnames:{},objtypes:{},terms:{"\u00edndic":0,"m\u00f3dul":0,"p\u00e1gin":0,contents:0,pesquis:0},titles:["Welcome to pylef&#8217;s documentation!"],titleterms:{and:0,documentation:0,indic:0,pylef:0,tabl:0,welcom:0}})
