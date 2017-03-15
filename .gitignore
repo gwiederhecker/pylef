@@ -8,8 +8,10 @@
 /*.egg-info
 
 # html doc files
-
 *.html
 
 # IPyNB swap files
 .*.swp
+
+# IPyNB checkpoints
+.ipynb_checkpoints
