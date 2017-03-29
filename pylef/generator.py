@@ -149,7 +149,9 @@ class BK4052:
 #
     def write(self, msg):
         """ write into the laser """
-        return self.instr.write(str(msg))
+        write_output = self.instr.write(str(msg)) 
+        self.wait()
+        return write_output 
         
     def query(self, msg):
         """ query into the laser """

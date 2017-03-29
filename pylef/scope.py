@@ -102,8 +102,10 @@ class TektronixTBS1062:
         return self.instr.write('*WAI')
 #
     def write(self, msg):
-        """ write into the instrument """
-        return self.instr.write(str(msg))
+        """ write into the laser """
+        write_output = self.instr.write(str(msg)) 
+        self.wait()
+        return write_output  
 #
     def query(self, msg):
         """ query from the instrument """
