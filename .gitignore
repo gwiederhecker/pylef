@@ -18,3 +18,5 @@
 
 # Sphinx build
 docs/_build/*
+
+*.swo
