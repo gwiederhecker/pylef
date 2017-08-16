@@ -4,6 +4,7 @@
 
 #################################
 import visa   # interface with NI-Visa
+<<<<<<< HEAD
 import numpy as np  # module for array manipulation
 import matplotlib.pyplot as plt
 import os   # module for general OS manipulation
@@ -187,4 +188,5 @@ def sweep_frequency(freq0, freq1, Nfreq, path = '', fname='', spacing = 'linear'
     fig.savefig(nome_fig, bbox_inches='tight')  # salva figura na pasta de trabalho
     dados.to_csv(nome_csv, sep='\t', index=False)  # \t significa que o separador é uma tabulação, index=False remove os indices da coluna
     return fig, dados
+
 
