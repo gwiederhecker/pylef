@@ -60,3 +60,4 @@ ou no Jupyter notebook
 ## import instrument modules
 from .scope import TektronixTBS1062
 from .generator import BK4052
+from .methods import sweep_frequency

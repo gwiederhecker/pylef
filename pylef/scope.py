@@ -393,7 +393,7 @@ class ChannelScope:
         """ dynamically scales the oscilloscope to the measurement. """
         #test whether channel is on
         if self.state() == 'off':
-            raise ValueError('O canal %s está desligado!' % self.channel)
+            raise ValueError('O canal %s do osciloscópio está desligado!' % self.channel)
         keep_loop = True
         while keep_loop:
             scale, pos_div = self.scale(), self.position()
