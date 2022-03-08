@@ -3,7 +3,7 @@
 """ Class for the Tektronics TBS1062 """
 
 #################################
-import visa   # interface with NI-Visa
+import pyvisa as visa   # interface with NI-Visa
 import numpy  # module for array manipulation
 import os   # module for general OS manipulation
 import time # module for time related funtions
@@ -35,13 +35,14 @@ def read_only_properties(*attrs):
 
     return class_rebuilder
 
-@read_only_properties('id_tek', 'average_list', 'ch1', 'ch2', 'math')
+@read_only_properties('id_tek_hex', 'id_tek_dec', 'average_list', 'ch1', 'ch2', 'math')
 class TektronixTBS1062:
     def __init__(self):
         """
             Classe para o osciloscópio
         """
-        self.id_tek = '0x0699'; # identificador do fabricante TEK
+        self.id_tek_hex = '0x0699'; # identificador do fabricante TEK em hexadecimal
+        self.id_tek_dec = '1689'; # identificador do fabricante TEK em decimal
         interface_name = self.find_interface()
         self.instr = visa.ResourceManager().open_resource(interface_name)   ## resource name
         self.ch1 = ChannelScope(self.instr, 'CH1')  # channel 1
@@ -55,10 +56,15 @@ class TektronixTBS1062:
         self.instr.write('Data:ENCDg SRI')  # set the instrument to read binary
         self.instr.write('Data:Width 1')   # set the data width to 1 byte
         self.instr.write('HEADER ON')   # set the header ON (needed)
-        self.instr.values_format.is_binary = True
-        self.instr.values_format.datatype = 'b'
-        self.instr.values_format.is_big_endian = True
-        self.instr.values_format.container = numpy.array    
+        
+        try:
+            self.instr.values_format.is_binary = True
+            self.instr.values_format.datatype = 'b'
+            self.instr.values_format.is_big_endian = True
+            self.instr.values_format.container = numpy.array
+            print("PyVisa is outdated, using old binary query format. Please consider updating to the latest version!")
+        except:
+            print("PyVisa is updated, using the new binary query format.")
 
     def find_interface(self):
         """ 
@@ -73,7 +79,7 @@ class TektronixTBS1062:
         tek_str = ''
         for resource in resources:
             fab_id = resource.split('::')[1]
-            if fab_id == self.id_tek:
+            if fab_id == self.id_tek_hex or fab_id == self.id_tek_dec:
                 instr = visa.ResourceManager().open_resource(resource)
                 instr.timeout = 10000 # set timeout to 10 seconds
                 tek_str = instr.query('*IDN?')
@@ -416,7 +422,13 @@ class ChannelScope:
 #
     def acquire_y_raw(self):
         """acquire the raw curve of whatever channel is set in "set_channel" """
-        return numpy.array(self.instr.query_values('CURVe?'))
+        try:
+            curv =  numpy.array(self.instr.query_values('CURVe?'))
+            print("PyVisa is outdated, using old binary query format. Please consider updating to the latest version.")
+            return curv
+        except:
+            # print("PyVisa is updated, using new binary query format.")
+            return numpy.array(self.instr.query_binary_values('CURVe?', datatype='b', is_big_endian=True))
 #
     def read_channel(self):
         """ returns a tuple with both the x and y axis already converted. It creates the x axis and reads the y axis from the channel set with the function "set_channel". The y acquisition is done using the function "acquire_y_raw" the converting factor by using the "waveform_conversion" function """

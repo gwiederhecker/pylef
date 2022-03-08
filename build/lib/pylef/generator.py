@@ -1,6 +1,6 @@
 #-*- coding: utf-8 -*-
 
-import visa # interface with NI-Visa
+import pyvisa as visa   # interface with NI-Visa
 import time # time handling
 ################################
 def read_only_properties(*attrs):
@@ -30,7 +30,7 @@ def read_only_properties(*attrs):
     return class_rebuilder
 
 ##########################
-@read_only_properties('id_bk', 'instr', 'ch1', 'ch2', )
+@read_only_properties('id_bk_hex', 'id_bk_dec', 'instr', 'ch1', 'ch2', )
 class BK4052:
     def __init__(self):
         """
@@ -99,7 +99,8 @@ class BK4052:
         >>> print(info2['stdev'])          # will return 0.5            
         """
 
-        self.id_bk = '0xF4ED'; # identificador do fabricante BK
+        self.id_bk_hex = '0xF4ED'; # identificador do fabricante BK em hexadecimal
+        self.id_bk_dec = '62701'; # identificador do fabricante BK em hexadecimal
         self.delay_time = 0.5 # time to wait after write and query - BK BUG!
         interface_name = self.find_interface()
         # instrument initialization
@@ -121,7 +122,7 @@ class BK4052:
         bk_str = ''
         for resource in resources:
             fab_id = resource.split('::')[1]
-            if fab_id == self.id_bk:
+            if fab_id == self.id_bk_hex or fab_id == self.id_bk_dec:
                 instr = visa.ResourceManager().open_resource(resource)
                 instr.timeout = 10000 # set timeout to 10 seconds
                 bk_str = instr.query('*IDN?', delay = self.delay_time)

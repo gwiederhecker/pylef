@@ -3,7 +3,7 @@
 """ Class for the Methods """
 
 #################################
-import visa   # interface with NI-Visa
+import pyvisa as visa   # interface with NI-Visa
 import numpy as np  # module for array manipulation
 import matplotlib.pyplot as plt
 import os   # module for general OS manipulation
